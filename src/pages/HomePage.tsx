@@ -1,11 +1,12 @@
 import { motion } from 'framer-motion';
-import { useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import OctopusCharacter from '../components/OctopusCharacter';
+import ParentGate from '../components/ParentGate';
 import { useAppStore, type View } from '../store/appStore';
 import { playPhrase } from '../lib/speak';
 
 interface WorldCard {
-  view: Exclude<View, 'home'>;
+  view: Exclude<View, 'home' | 'parent'>;
   labelEn: string;
   labelDe: string;
   emoji: string;
@@ -21,15 +22,34 @@ const WORLDS: WorldCard[] = [
 
 export default function HomePage() {
   const goTo = useAppStore((s) => s.goTo);
+  const audioEnabled = useAppStore((s) => s.audioEnabled);
+  const [showGate, setShowGate] = useState(false);
+  const holdRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
+    if (!audioEnabled) return;
     const timer = setTimeout(() => { playPhrase('greet-hello', 'en'); }, 400);
     return () => clearTimeout(timer);
-  }, []);
+  }, [audioEnabled]);
+
+  const startHold = () => {
+    holdRef.current = setTimeout(() => setShowGate(true), 2000);
+  };
+  const cancelHold = () => {
+    if (holdRef.current) clearTimeout(holdRef.current);
+  };
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-start p-4 pt-8 md:pt-12 bg-[var(--color-cream)]">
-      <OctopusCharacter mood="waving" size={200} />
+      <div
+        onPointerDown={startHold}
+        onPointerUp={cancelHold}
+        onPointerLeave={cancelHold}
+        className="cursor-pointer select-none"
+        aria-label="Otto — hold for 2 seconds to open parent settings"
+      >
+        <OctopusCharacter mood="waving" size={200} />
+      </div>
 
       <h1
         className="text-4xl md:text-5xl font-bold text-[var(--color-warm-brown)] mt-2 mb-1"
@@ -61,6 +81,17 @@ export default function HomePage() {
           </motion.button>
         ))}
       </div>
+
+      <div className="text-xs text-[var(--color-warm-brown)]/40 mt-8 pb-4">
+        Hold Otto for 2 seconds for parent settings
+      </div>
+
+      {showGate && (
+        <ParentGate
+          onSuccess={() => { setShowGate(false); goTo('parent'); }}
+          onCancel={() => setShowGate(false)}
+        />
+      )}
     </div>
   );
 }

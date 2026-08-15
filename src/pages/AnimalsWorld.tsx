@@ -13,6 +13,7 @@ export default function AnimalsWorld() {
   const [animalIndex, setAnimalIndex] = useState(0);
   const [phase, setPhase] = useState<Phase>('intro');
   const [ottoMood, setOttoMood] = useState<Mood>('waving');
+  const [videoState, setVideoState] = useState<'loading' | 'playing' | 'failed'>('loading');
 
   const animal = ANIMALS[animalIndex];
   const decoys = useMemo(() => decoysFor(animal.key, 2), [animal.key]);
@@ -35,11 +36,11 @@ export default function AnimalsWorld() {
         setOttoMood('idle');
         await wait(300);
         if (cancelled) return;
+        setVideoState('loading');
         setPhase('video');
       } else if (phase === 'video') {
-        await wait(4000);
-        if (cancelled) return;
-        setPhase('find');
+        // Handled by a separate effect that reacts to videoState
+        // (waits for the video to actually play before starting the timer).
       } else if (phase === 'find') {
         setOttoMood('talking');
         await playPhrase(`find-${animal.key}`, 'en');
@@ -70,13 +71,48 @@ export default function AnimalsWorld() {
     };
   }, [phase, animalIndex, animal]);
 
-  // Autoplay + loop the video when we land on 'video' phase
+  // Autoplay the video when we land on 'video' phase
   useEffect(() => {
     if (phase === 'video' && videoRef.current) {
       videoRef.current.currentTime = 0;
-      videoRef.current.play().catch(() => { /* browsers may block autoplay */ });
+      videoRef.current.play().catch(() => setVideoState('failed'));
     }
   }, [phase, animalIndex]);
+
+  // Advance to Find round based on actual video state, not a blind timer.
+  // - Loading: wait up to 4s for playback to start; if not, fall back to emoji mode.
+  // - Playing: show for 3.5s, then move on.
+  // - Failed:  emoji fills the screen (from render side); linger 2.5s, then move on.
+  useEffect(() => {
+    if (phase !== 'video') return;
+    let cancelled = false;
+    const timers: ReturnType<typeof setTimeout>[] = [];
+
+    if (videoState === 'loading') {
+      timers.push(setTimeout(() => {
+        if (!cancelled) setVideoState('failed');
+      }, 4000));
+    } else if (videoState === 'playing') {
+      timers.push(setTimeout(() => {
+        if (!cancelled) setPhase('find');
+      }, 3500));
+    } else if (videoState === 'failed') {
+      timers.push(setTimeout(() => {
+        if (!cancelled) setPhase('find');
+      }, 2500));
+    }
+
+    // Belt-and-braces: no matter what, don't sit on the video phase for more than 6s.
+    const hardCap = setTimeout(() => {
+      if (!cancelled && phase === 'video') setPhase('find');
+    }, 6000);
+    timers.push(hardCap);
+
+    return () => {
+      cancelled = true;
+      for (const t of timers) clearTimeout(t);
+    };
+  }, [phase, videoState]);
 
   const handleFindTap = (choice: Concept) => {
     if (choice.key === animal.key) {
@@ -118,18 +154,32 @@ export default function AnimalsWorld() {
             <div className="text-3xl font-bold text-[var(--color-warm-brown)]">
               {animal.en} · {animal.de}
             </div>
-            <div className="w-full aspect-video bg-black rounded-3xl overflow-hidden shadow-xl">
+            <div className="relative w-full aspect-video bg-white rounded-3xl overflow-hidden shadow-xl flex items-center justify-center">
+              {/* Fallback / loading state: big animated emoji. Always rendered so
+                  it's visible instantly; the video sits on top once playing. */}
+              <motion.div
+                animate={{ scale: [1, 1.08, 1], rotate: [0, -3, 3, 0] }}
+                transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
+                className="text-[10rem] leading-none select-none"
+              >
+                {animal.emoji}
+              </motion.div>
               <video
+                key={`${animal.key}-${animal.videoUrl}`}
                 ref={videoRef}
                 src={animal.videoUrl}
-                className="w-full h-full object-cover"
+                className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ${videoState === 'playing' ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
                 autoPlay
                 loop
                 muted
                 playsInline
+                preload="auto"
+                onCanPlay={() => setVideoState('playing')}
+                onPlaying={() => setVideoState('playing')}
+                onError={() => setVideoState('failed')}
+                onStalled={() => { /* let hard cap handle it */ }}
               />
             </div>
-            <div className="text-8xl">{animal.emoji}</div>
           </div>
         )}
 

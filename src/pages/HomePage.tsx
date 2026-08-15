@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import { useEffect } from 'react';
 import OctopusCharacter from '../components/OctopusCharacter';
 import { useAppStore, type View } from '../store/appStore';
-import { speak } from '../lib/speak';
+import { playPhrase } from '../lib/speak';
 
 interface WorldCard {
   view: Exclude<View, 'home'>;
@@ -23,7 +23,7 @@ export default function HomePage() {
   const goTo = useAppStore((s) => s.goTo);
 
   useEffect(() => {
-    const timer = setTimeout(() => { speak('Hello!', 'en'); }, 400);
+    const timer = setTimeout(() => { playPhrase('greet-hello', 'en'); }, 400);
     return () => clearTimeout(timer);
   }, []);
 

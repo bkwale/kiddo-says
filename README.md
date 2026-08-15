@@ -1,32 +1,49 @@
-# React + TypeScript + Vite
+# Kiddo Says
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+A bilingual (English + German) musical learning PWA for toddlers.
 
-Currently, two official plugins are available:
+**Live:** https://kiddo-says.vercel.app
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## For a 2-year-old
 
-## React Compiler
+- **Otto** the friendly octopus mascot introduces every concept
+- **Auto-flow** — tap a world, sit back. Intro → real animal video → find-the-animal → praise → next.
+- **Bilingual audio** on every word and phrase (EN + DE)
+- **Songs** — classic nursery rhymes he'll hear at nursery/Grandma's too
+- **No fail sounds** — gentle reprompts, never a red X
+- **Big touch targets**, no reading required
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Local dev
 
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
-
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+```bash
+npm install
+npm run dev
+# Open http://localhost:5173
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+## Generate the character voice audio (ElevenLabs)
+
+MP3s are shipped as static files in `public/audio/{en,de}/`. To (re)generate:
+
+1. Copy `.env.local.example` → `.env.local` and paste your ElevenLabs API key
+2. Run:
+
+   ```bash
+   npm run generate-audio
+   ```
+
+   Idempotent — skips MP3s that already exist. Set `FORCE=true` to re-generate everything.
+
+3. Commit the `public/audio/` folder and push. Vercel auto-redeploys.
+
+The app auto-detects when MP3s exist; if not, it falls back to browser SpeechSynthesis so the app still works during development.
+
+## Stack
+
+- Vite + React 19 + TypeScript
+- Tailwind CSS v4
+- Framer Motion (used sparingly — `whileHover`/`whileTap` only)
+- Zustand for state
+- vite-plugin-pwa for install-to-home-screen
+- ElevenLabs for character voice
+- Free Pexels / Pixabay videos for real animal footage

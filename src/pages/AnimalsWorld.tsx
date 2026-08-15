@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import OctopusCharacter, { type Mood } from '../components/OctopusCharacter';
 import { ANIMALS, decoysFor, type Concept } from '../data/concepts';
-import { speak, saySequence, stopSpeaking } from '../lib/speak';
+import { playPhrase, saySequenceByKey, speak, stopAll } from '../lib/speak';
 import { useAppStore } from '../store/appStore';
 
 type Phase = 'intro' | 'video' | 'find' | 'praise' | 'transition';
@@ -30,29 +30,28 @@ export default function AnimalsWorld() {
     async function runPhase() {
       if (phase === 'intro') {
         setOttoMood('talking');
-        await saySequence(animal.en + '.', animal.de + '.');
+        await saySequenceByKey(animal.key);
         if (cancelled) return;
         setOttoMood('idle');
         await wait(300);
         if (cancelled) return;
         setPhase('video');
       } else if (phase === 'video') {
-        // Video autoplays and loops; move on after ~4 sec.
         await wait(4000);
         if (cancelled) return;
         setPhase('find');
       } else if (phase === 'find') {
         setOttoMood('talking');
-        await speak(`Where is the ${animal.en.toLowerCase()}?`, 'en');
+        await playPhrase(`find-${animal.key}`, 'en');
         if (cancelled) return;
         setOttoMood('idle');
       } else if (phase === 'praise') {
         setOttoMood('happy');
-        await speak('Yay! Well done!', 'en');
+        await playPhrase('praise-yay', 'en');
         if (cancelled) return;
-        await wait(400);
+        await wait(300);
         if (cancelled) return;
-        await speak('Juhu! Gut gemacht!', 'de');
+        await playPhrase('praise-well-done', 'de');
         if (cancelled) return;
         setPhase('transition');
       } else if (phase === 'transition') {
@@ -67,7 +66,7 @@ export default function AnimalsWorld() {
     runPhase();
     return () => {
       cancelled = true;
-      stopSpeaking();
+      stopAll();
     };
   }, [phase, animalIndex, animal]);
 

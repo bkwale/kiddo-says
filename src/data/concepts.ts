@@ -12,15 +12,18 @@ export interface Concept {
   bgColor: string;       // Tailwind bg colour when this concept is active
 }
 
-// Video sources: Pexels + Pixabay (Creative Commons, free, no attribution required).
-// Direct MP4 URLs so we don't need any API key.
+// Video sources: Pexels (Creative Commons, free, no attribution required).
+// Direct MP4 URLs, all verified landscape 16:9. Each URL was picked to be
+// short-ish, clean, and clearly show the animal.
+// If any URL 404s later, the AnimalsWorld video phase falls back to a big
+// animated emoji so the flow never breaks.
 export const ANIMALS: Concept[] = [
   {
     key: 'dog',
     en: 'Dog',
     de: 'Hund',
     emoji: '🐶',
-    videoUrl: 'https://videos.pexels.com/video-files/4763824/4763824-hd_720_1280_25fps.mp4',
+    videoUrl: 'https://videos.pexels.com/video-files/9898282/9898282-sd_640_360_24fps.mp4',
     posterEmoji: '🐶',
     bgColor: 'bg-amber-100',
   },
@@ -29,7 +32,7 @@ export const ANIMALS: Concept[] = [
     en: 'Cat',
     de: 'Katze',
     emoji: '🐱',
-    videoUrl: 'https://videos.pexels.com/video-files/854982/854982-hd_1280_720_25fps.mp4',
+    videoUrl: 'https://videos.pexels.com/video-files/4009842/4009842-sd_640_360_24fps.mp4',
     posterEmoji: '🐱',
     bgColor: 'bg-orange-100',
   },
@@ -38,7 +41,7 @@ export const ANIMALS: Concept[] = [
     en: 'Cow',
     de: 'Kuh',
     emoji: '🐮',
-    videoUrl: 'https://videos.pexels.com/video-files/4763824/4763824-hd_720_1280_25fps.mp4',
+    videoUrl: 'https://videos.pexels.com/video-files/28161593/12314429_640_360_50fps.mp4',
     posterEmoji: '🐮',
     bgColor: 'bg-lime-100',
   },
@@ -47,7 +50,7 @@ export const ANIMALS: Concept[] = [
     en: 'Duck',
     de: 'Ente',
     emoji: '🦆',
-    videoUrl: 'https://videos.pexels.com/video-files/5788442/5788442-hd_1920_1080_30fps.mp4',
+    videoUrl: 'https://videos.pexels.com/video-files/17535478/17535478-sd_960_506_24fps.mp4',
     posterEmoji: '🦆',
     bgColor: 'bg-sky-100',
   },
@@ -56,7 +59,7 @@ export const ANIMALS: Concept[] = [
     en: 'Elephant',
     de: 'Elefant',
     emoji: '🐘',
-    videoUrl: 'https://videos.pexels.com/video-files/8320655/8320655-hd_1920_1080_30fps.mp4',
+    videoUrl: 'https://videos.pexels.com/video-files/9983862/9983862-sd_640_360_25fps.mp4',
     posterEmoji: '🐘',
     bgColor: 'bg-stone-200',
   },
@@ -65,7 +68,7 @@ export const ANIMALS: Concept[] = [
     en: 'Lion',
     de: 'Löwe',
     emoji: '🦁',
-    videoUrl: 'https://videos.pexels.com/video-files/8320655/8320655-hd_1920_1080_30fps.mp4',
+    videoUrl: 'https://videos.pexels.com/video-files/8153196/8153196-sd_640_360_25fps.mp4',
     posterEmoji: '🦁',
     bgColor: 'bg-yellow-100',
   },
@@ -74,7 +77,7 @@ export const ANIMALS: Concept[] = [
     en: 'Giraffe',
     de: 'Giraffe',
     emoji: '🦒',
-    videoUrl: 'https://videos.pexels.com/video-files/8320655/8320655-hd_1920_1080_30fps.mp4',
+    videoUrl: 'https://videos.pexels.com/video-files/35750705/15154870_640_360_30fps.mp4',
     posterEmoji: '🦒',
     bgColor: 'bg-amber-100',
   },
@@ -83,7 +86,7 @@ export const ANIMALS: Concept[] = [
     en: 'Octopus',
     de: 'Oktopus',
     emoji: '🐙',
-    videoUrl: 'https://videos.pexels.com/video-files/2731905/2731905-hd_1920_1080_30fps.mp4',
+    videoUrl: 'https://videos.pexels.com/video-files/34494118/14615361_640_360_60fps.mp4',
     posterEmoji: '🐙',
     bgColor: 'bg-purple-100',
   },
@@ -92,7 +95,7 @@ export const ANIMALS: Concept[] = [
     en: 'Whale',
     de: 'Wal',
     emoji: '🐳',
-    videoUrl: 'https://videos.pexels.com/video-files/2731905/2731905-hd_1920_1080_30fps.mp4',
+    videoUrl: 'https://videos.pexels.com/video-files/15546563/15546563-sd_640_360_25fps.mp4',
     posterEmoji: '🐳',
     bgColor: 'bg-blue-100',
   },

@@ -5,7 +5,7 @@
 // German translations use the informal du-form (child talking to parent /
 // familiar adult), not formal Sie.
 
-export type Category = 'needs' | 'manners' | 'greetings' | 'clothes' | 'feelings';
+export type Category = 'needs' | 'manners' | 'greetings' | 'clothes' | 'feelings' | 'bath' | 'bedtime' | 'nursery';
 
 export interface TodPhrase {
   key: string;
@@ -56,4 +56,26 @@ export const TODDLER_PHRASES: TodPhrase[] = [
   { key: 'im-happy',     en: "I'm happy",         de: 'Ich bin glücklich',    emoji: '😄',  bg: 'bg-yellow-200', ring: 'ring-yellow-400', category: 'feelings' },
   { key: 'im-sad',       en: "I'm sad",           de: 'Ich bin traurig',      emoji: '😢',  bg: 'bg-blue-200',   ring: 'ring-blue-400',   category: 'feelings' },
   { key: 'im-scared',    en: "I'm scared",        de: 'Ich habe Angst',       emoji: '😨',  bg: 'bg-purple-100', ring: 'ring-purple-300', category: 'feelings' },
+
+  // ------- BATH TIME -------
+  { key: 'bath-time',    en: 'Bath time!',         de: 'Baden!',                emoji: '🛁',  bg: 'bg-sky-100',    ring: 'ring-sky-300',    category: 'bath' },
+  { key: 'splash',       en: 'Splash!',            de: 'Platsch!',              emoji: '💦',  bg: 'bg-cyan-100',   ring: 'ring-cyan-300',   category: 'bath' },
+  { key: 'bubbles',      en: 'Bubbles',            de: 'Seifenblasen',          emoji: '🫧',  bg: 'bg-blue-100',   ring: 'ring-blue-300',   category: 'bath' },
+  { key: 'wash-hair',    en: 'Wash my hair',       de: 'Wasch mir die Haare',   emoji: '🧴',  bg: 'bg-teal-100',   ring: 'ring-teal-300',   category: 'bath' },
+  { key: 'dry-me',       en: 'Please dry me',      de: 'Trockne mich ab, bitte', emoji: '🧻', bg: 'bg-amber-100',  ring: 'ring-amber-300',  category: 'bath' },
+
+  // ------- BEDTIME -------
+  { key: 'story-please', en: 'Story please',       de: 'Eine Geschichte, bitte', emoji: '📖', bg: 'bg-indigo-100', ring: 'ring-indigo-300', category: 'bedtime' },
+  { key: 'tuck-me-in',   en: 'Tuck me in',         de: 'Deck mich zu',           emoji: '🛏️', bg: 'bg-violet-100', ring: 'ring-violet-300', category: 'bedtime' },
+  { key: 'kiss-goodnight', en: 'Kiss goodnight',   de: 'Küsschen, gute Nacht',   emoji: '💋',  bg: 'bg-rose-100',   ring: 'ring-rose-300',   category: 'bedtime' },
+  { key: 'one-more',     en: 'One more',           de: 'Noch eins',              emoji: '🔁',  bg: 'bg-fuchsia-100',ring: 'ring-fuchsia-300',category: 'bedtime' },
+  { key: 'want-cuddle',  en: 'I want to cuddle',   de: 'Ich möchte kuscheln',    emoji: '🤗',  bg: 'bg-pink-100',   ring: 'ring-pink-300',   category: 'bedtime' },
+  { key: 'my-teddy',     en: 'My teddy',           de: 'Mein Teddy',             emoji: '🧸',  bg: 'bg-amber-200',  ring: 'ring-amber-400',  category: 'bedtime' },
+  { key: 'love-you',     en: 'I love you',         de: 'Ich hab dich lieb',      emoji: '💕',  bg: 'bg-rose-200',   ring: 'ring-rose-400',   category: 'bedtime' },
+
+  // ------- NURSERY DROP-OFF -------
+  { key: 'have-good-day', en: 'Have a good day',   de: 'Einen schönen Tag',      emoji: '🌟',  bg: 'bg-yellow-100', ring: 'ring-yellow-300', category: 'nursery' },
+  { key: 'come-back-soon', en: 'Come back soon',   de: 'Komm bald wieder',       emoji: '↩️',  bg: 'bg-emerald-100',ring: 'ring-emerald-300',category: 'nursery' },
+  { key: 'wheres-my-bag', en: "Where's my bag?",   de: 'Wo ist meine Tasche?',   emoji: '🎒',  bg: 'bg-lime-100',   ring: 'ring-lime-300',   category: 'nursery' },
+  { key: 'miss-you',     en: 'I miss you',         de: 'Ich vermisse dich',      emoji: '💭',  bg: 'bg-purple-100', ring: 'ring-purple-300', category: 'nursery' },
 ];

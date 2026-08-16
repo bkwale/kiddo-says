@@ -86,6 +86,20 @@ export const CHARACTER_LINES: Phrase[] = [
 ];
 
 // ============================================================================
+// 6. TODDLER PHRASES — the "Say It" world
+// Re-exported from toddler-phrases.ts (which owns the visual metadata).
+// Keeping the audio manifest in sync with the on-screen phrases means one
+// npm run generate-audio run covers every tap in the app.
+// ============================================================================
+import { TODDLER_PHRASES } from './toddler-phrases';
+export const TODDLER_LINES: Phrase[] = TODDLER_PHRASES.map((p) => ({
+  key: p.key,
+  en: p.en,
+  de: p.de,
+  emoji: p.emoji,
+}));
+
+// ============================================================================
 // COMBINED — everything the generator will produce
 // ============================================================================
 export const ALL_PHRASES: Phrase[] = [
@@ -94,4 +108,5 @@ export const ALL_PHRASES: Phrase[] = [
   ...FIND_PROMPTS,
   ...SAY_PROMPTS,
   ...CHARACTER_LINES,
+  ...TODDLER_LINES,
 ];

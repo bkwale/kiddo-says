@@ -16,6 +16,7 @@ interface WorldCard {
 
 const WORLDS: WorldCard[] = [
   { view: 'animals', labelEn: 'Animals', labelDe: 'Tiere',   emoji: '🐾', bg: 'bg-orange-200', ring: 'ring-orange-400' },
+  { view: 'phrases', labelEn: 'Say It',  labelDe: 'Sag es',  emoji: '💬', bg: 'bg-rose-200',   ring: 'ring-rose-400' },
   { view: 'songs',   labelEn: 'Songs',   labelDe: 'Lieder',  emoji: '🎵', bg: 'bg-purple-200', ring: 'ring-purple-400' },
   { view: 'numbers', labelEn: 'Numbers', labelDe: 'Zahlen',  emoji: '🔢', bg: 'bg-teal-200',   ring: 'ring-teal-400' },
 ];
@@ -62,7 +63,7 @@ export default function HomePage() {
         What shall we play?
       </p>
 
-      <div className="w-full max-w-xl grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+      <div className="w-full max-w-2xl grid grid-cols-2 gap-4 md:gap-6">
         {WORLDS.map((world) => (
           <motion.button
             key={world.view}

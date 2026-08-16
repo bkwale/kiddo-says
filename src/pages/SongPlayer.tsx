@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
 import { songByKey } from '../data/songs';
-import { speak, stopAll } from '../lib/speak';
+import { stopAll } from '../lib/speak';
 import OctopusCharacter from '../components/OctopusCharacter';
 
 interface Props {

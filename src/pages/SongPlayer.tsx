@@ -53,12 +53,11 @@ export default function SongPlayer({ songKey, onBack }: Props) {
       return;
     }
     setLineIndex(i);
-    const line = song.lines[i];
-    // If no real audio, use TTS on the current line so the app "speaks" the song.
-    if (!song.audioUrl) {
-      speak(`${line.en}. ${line.de}.`, 'en').catch(() => {});
-    }
-    timeoutRef.current = setTimeout(() => advance(i + 1), line.durationMs);
+    // NOTE: We deliberately do NOT read the lyrics via SpeechSynthesis.
+    // Robotic TTS reading nursery rhymes sounds terrible. The sung
+    // recording from Suno will drop into song.audioUrl and drive playback.
+    // Until then, the lyrics animate visually and the parent can sing.
+    timeoutRef.current = setTimeout(() => advance(i + 1), song.lines[i].durationMs);
   };
 
   const play = () => {
@@ -178,8 +177,8 @@ export default function SongPlayer({ songKey, onBack }: Props) {
         </div>
 
         {!song.audioUrl && (
-          <div className="text-xs text-[var(--color-warm-brown)]/50 pb-2">
-            (Full sung version coming soon — for now Otto reads the lyrics.)
+          <div className="text-xs text-[var(--color-warm-brown)]/50 pb-2 text-center px-4">
+            Sing along! The recorded version arrives soon.
           </div>
         )}
       </div>

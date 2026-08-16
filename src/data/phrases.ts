@@ -111,6 +111,19 @@ export const VOCAB_LINES: Phrase[] = ALL_VOCAB.map((v) => ({
 }));
 
 // ============================================================================
+// 8. SITUATION WORLDS — playground, eating, ouch, weather, vehicles
+// (see src/data/situations.ts). For vehicles the audio string includes the
+// sound-word ("Car. Vroom vroom!") — that's the intended playback.
+// ============================================================================
+import { ALL_SITUATIONS } from './situations';
+export const SITUATION_LINES: Phrase[] = ALL_SITUATIONS.map((v) => ({
+  key: v.key,
+  en: v.en,
+  de: v.de,
+  emoji: v.emoji,
+}));
+
+// ============================================================================
 // COMBINED — everything the generator will produce
 // ============================================================================
 export const ALL_PHRASES: Phrase[] = [
@@ -121,4 +134,5 @@ export const ALL_PHRASES: Phrase[] = [
   ...CHARACTER_LINES,
   ...TODDLER_LINES,
   ...VOCAB_LINES,
+  ...SITUATION_LINES,
 ];

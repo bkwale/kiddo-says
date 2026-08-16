@@ -100,6 +100,17 @@ export const TODDLER_LINES: Phrase[] = TODDLER_PHRASES.map((p) => ({
 }));
 
 // ============================================================================
+// 7. VOCAB WORLDS — colors, body parts, family (see src/data/vocab.ts)
+// ============================================================================
+import { ALL_VOCAB } from './vocab';
+export const VOCAB_LINES: Phrase[] = ALL_VOCAB.map((v) => ({
+  key: v.key,
+  en: v.en,
+  de: v.de,
+  emoji: v.emoji,
+}));
+
+// ============================================================================
 // COMBINED — everything the generator will produce
 // ============================================================================
 export const ALL_PHRASES: Phrase[] = [
@@ -109,4 +120,5 @@ export const ALL_PHRASES: Phrase[] = [
   ...SAY_PROMPTS,
   ...CHARACTER_LINES,
   ...TODDLER_LINES,
+  ...VOCAB_LINES,
 ];

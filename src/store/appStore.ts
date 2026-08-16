@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-export type View = 'home' | 'animals' | 'songs' | 'numbers' | 'phrases' | 'parent';
+export type View = 'home' | 'animals' | 'songs' | 'numbers' | 'phrases' | 'colors' | 'body' | 'family' | 'parent';
 
 interface AppState {
   view: View;

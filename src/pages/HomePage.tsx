@@ -17,6 +17,9 @@ interface WorldCard {
 const WORLDS: WorldCard[] = [
   { view: 'animals', labelEn: 'Animals', labelDe: 'Tiere',   emoji: '🐾', bg: 'bg-orange-200', ring: 'ring-orange-400' },
   { view: 'phrases', labelEn: 'Say It',  labelDe: 'Sag es',  emoji: '💬', bg: 'bg-rose-200',   ring: 'ring-rose-400' },
+  { view: 'family',  labelEn: 'Family',  labelDe: 'Familie', emoji: '👨‍👩‍👧‍👦', bg: 'bg-fuchsia-200', ring: 'ring-fuchsia-400' },
+  { view: 'body',    labelEn: 'Body',    labelDe: 'Körper',  emoji: '👐', bg: 'bg-pink-200',   ring: 'ring-pink-400' },
+  { view: 'colors',  labelEn: 'Colors',  labelDe: 'Farben',  emoji: '🌈', bg: 'bg-sky-200',    ring: 'ring-sky-400' },
   { view: 'songs',   labelEn: 'Songs',   labelDe: 'Lieder',  emoji: '🎵', bg: 'bg-purple-200', ring: 'ring-purple-400' },
   { view: 'numbers', labelEn: 'Numbers', labelDe: 'Zahlen',  emoji: '🔢', bg: 'bg-teal-200',   ring: 'ring-teal-400' },
 ];

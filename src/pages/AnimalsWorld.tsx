@@ -71,18 +71,44 @@ export default function AnimalsWorld() {
     };
   }, [phase, animalIndex, animal]);
 
-  // Autoplay the video when we land on 'video' phase
+  // When the video is loaded enough to play, kick off playback. We wait for
+  // canplay to avoid the AbortError that fires when play() is called before
+  // the browser has decoded any frames. autoPlay attribute is intentionally
+  // removed from the <video> so we don't race with our own imperative call.
   useEffect(() => {
-    if (phase === 'video' && videoRef.current) {
-      videoRef.current.currentTime = 0;
-      videoRef.current.play().catch(() => setVideoState('failed'));
+    if (phase !== 'video') return;
+    const v = videoRef.current;
+    if (!v) return;
+
+    const tryPlay = () => {
+      if (!v.paused) return;
+      const p = v.play();
+      if (p) p.catch((err) => {
+        console.warn('video.play() rejected:', err?.name);
+        // On failure the load-timeout below will surface the emoji fallback.
+      });
+    };
+
+    // Ready to play right now?
+    if (v.readyState >= 3) {
+      tryPlay();
+    } else {
+      v.addEventListener('canplay', tryPlay, { once: true });
     }
+
+    return () => {
+      v.removeEventListener('canplay', tryPlay);
+    };
   }, [phase, animalIndex]);
 
-  // Advance to Find round based on actual video state, not a blind timer.
-  // - Loading: wait up to 4s for playback to start; if not, fall back to emoji mode.
-  // - Playing: show for 3.5s, then move on.
-  // - Failed:  emoji fills the screen (from render side); linger 2.5s, then move on.
+  // Advance to Find round based on ACTUAL playback progress, not just canplay.
+  // canplay fires when the browser has enough data, but the video may still be
+  // paused (autoplay quirks). We only trust videoState='playing' once real
+  // frames are advancing (see onTimeUpdate + onPlaying handlers below).
+  //
+  // - loading: wait up to 5s for real playback; then linger 2s more on emoji.
+  // - playing: show for 4s (real seconds of video), then move on.
+  // - failed:  emoji fills the screen; linger 2s, then move on.
   useEffect(() => {
     if (phase !== 'video') return;
     let cancelled = false;
@@ -91,21 +117,21 @@ export default function AnimalsWorld() {
     if (videoState === 'loading') {
       timers.push(setTimeout(() => {
         if (!cancelled) setVideoState('failed');
-      }, 4000));
+      }, 5000));
     } else if (videoState === 'playing') {
       timers.push(setTimeout(() => {
         if (!cancelled) setPhase('find');
-      }, 3500));
+      }, 4000));
     } else if (videoState === 'failed') {
       timers.push(setTimeout(() => {
         if (!cancelled) setPhase('find');
-      }, 2500));
+      }, 2000));
     }
 
-    // Belt-and-braces: no matter what, don't sit on the video phase for more than 6s.
+    // Hard cap so the phase can never freeze
     const hardCap = setTimeout(() => {
       if (!cancelled && phase === 'video') setPhase('find');
-    }, 6000);
+    }, 7500);
     timers.push(hardCap);
 
     return () => {
@@ -169,15 +195,19 @@ export default function AnimalsWorld() {
                 ref={videoRef}
                 src={animal.videoUrl}
                 className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ${videoState === 'playing' ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
-                autoPlay
                 loop
                 muted
                 playsInline
                 preload="auto"
-                onCanPlay={() => setVideoState('playing')}
                 onPlaying={() => setVideoState('playing')}
+                onTimeUpdate={(e) => {
+                  // Real playback progress — the only trustworthy "playing" signal.
+                  // canplay/loadedmetadata fire on load, before frames advance.
+                  if (e.currentTarget.currentTime > 0.15) {
+                    setVideoState((s) => (s === 'playing' ? s : 'playing'));
+                  }
+                }}
                 onError={() => setVideoState('failed')}
-                onStalled={() => { /* let hard cap handle it */ }}
               />
             </div>
           </div>
